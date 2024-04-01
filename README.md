@@ -81,4 +81,3 @@ Exercícios
 - Mostrar as datas em que o aluno compareceu à academia em um intervalo de datas.
 
 - Para um determinado exercício, mostrar a evolução de carga ao longo do tempo.
-
