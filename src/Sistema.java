@@ -4,9 +4,9 @@ import java.util.List;
 
 
 public class Sistema {
-    protected List<Alunos> alunosCadastrados = new ArrayList<>();
-    protected List<Planos> listaPlanos = new ArrayList<>();
-    protected String nomeAcademia;
+    private List<Alunos> alunosCadastrados = new ArrayList<>();
+    private List<Planos> listaPlanos = new ArrayList<>();
+    private String nomeAcademia;
 
     public Sistema(String nome){
         this.nomeAcademia = nome;
@@ -29,5 +29,9 @@ public class Sistema {
 
     public List<Planos> getListaPlanos() {
         return listaPlanos;
+    }
+
+    public String getNomeAcademia() {
+        return nomeAcademia;
     }
 }

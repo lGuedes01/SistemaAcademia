@@ -2,11 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Planos {
-    protected int codigo;
-    protected String nome;
-    protected float preco;
-
-    protected List<Alunos> alunosCadastradosPlano = new ArrayList<>();
+    private int codigo;
+    private String nome;
+    private float preco;
+    private List<Alunos> alunosCadastradosPlano = new ArrayList<>();
 
     public Planos(String nome, int codigo, float preco){
         this.nome = nome;

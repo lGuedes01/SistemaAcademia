@@ -5,19 +5,20 @@ import java.util.Date;
 import java.util.List;
 
 public class Alunos {
-    protected Date dataNascimento;
+    protected String dataNascimento;
     protected String CPF;
     protected String nome;
 
-    public Alunos(String nome, String CPF, String data) throws ParseException {
+    public Alunos(String nome, String CPF, String patternDate) throws ParseException {
         this.CPF = CPF;
         this.nome = nome;
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        this.dataNascimento = formato.parse(data);
+        Date date = formato.parse(patternDate);
+        this.dataNascimento = formato.format(date);
 
     }
 
-    public Date getDataNascimento() {
+    public String getDataNascimento() {
         return dataNascimento;
     }
 
