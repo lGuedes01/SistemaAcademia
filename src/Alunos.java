@@ -1,29 +1,26 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.sql.Date;
+import java.util.Scanner;
 
 public class Alunos {
-    protected String dataNascimento;
+    protected Date dataNascimento;
     protected String CPF;
     protected String nome;
 
-    public Alunos(String nome, String CPF, String patternDate) throws ParseException {
+    private static final Scanner input = new Scanner(System.in);
+
+    public Alunos(String nome, String CPF, String patternDate){
         this.CPF = CPF;
         this.nome = nome;
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = formato.parse(patternDate);
-        this.dataNascimento = formato.format(date);
+        this.dataNascimento = Date.valueOf(patternDate);
 
-    }
-
-    public String getDataNascimento() {
-        return dataNascimento;
     }
 
     public String getCPF() {
         return CPF;
+    }
+
+    public Date getDataNascimento() {
+        return dataNascimento;
     }
 
     public String getNome() {

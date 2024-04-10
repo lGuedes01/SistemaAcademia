@@ -1,24 +1,33 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Planos {
-    private int codigo;
+    private int id;
     private String nome;
     private float preco;
-    private List<Alunos> alunosCadastradosPlano = new ArrayList<>();
 
-    public Planos(String nome, int codigo, float preco){
+
+
+
+    public Planos(String nome, int id, float preco){
         this.nome = nome;
-        this.codigo = codigo;
+        this.id = id;
         this.preco = preco;
 
     }
 
-    public void setAlunosCadastradosPlano(Alunos aluno) {
-        this.alunosCadastradosPlano.add(aluno);
+    public int getId() {
+        return id;
     }
 
-    public void incluir(Alunos aluno, Planos plano){
-
+    public String getNome() {
+        return nome;
     }
+
+    public float getPreco() {
+        return preco;
+    }
+
+
 }
