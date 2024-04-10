@@ -1,0 +1,66 @@
+CREATE SCHEMA Academia;
+USE Academia;
+
+create table Plano(
+    idPlano int not null,
+    nome varchar(255) not null,
+    preco float not null,
+    primary key (idPlano)
+);
+
+create table Aluno(
+    idAluno int not null auto_increment,
+    cpf varchar(20) not null,
+    nome varchar(255) not null,
+    dataNasc date not null,
+    idPlano int,
+    dataPlano date,
+    nCartao varchar(20),
+    dataVenc date,
+    cvc int,
+    primary key (idAluno),
+    foreign key (idPlano)
+    references Plano(idPlano)
+    on update cascade
+);
+
+create table Exercicio(
+    idExercicio int not null,
+    nome varchar(255) not null,
+    musculos varchar(255),
+    primary key (idExercicio)
+);
+
+create table Treino(
+    idTreino int not null auto_increment,
+    idAluno int not null,
+    nome varchar(255) not null,
+    primary key (idTreino, idAluno),
+    foreign key (idAluno) references Aluno(idAluno)
+);
+
+create table AlunoExercicio(
+    idAluno int not null,
+    idExercicio int not null,
+    dataExec date not null,
+    carga int,
+    primary key (idAluno, idExercicio, dataExec),
+    foreign key (idAluno) references Aluno(idAluno),
+    foreign key (idExercicio) references Exercicio(idExercicio)
+);
+
+create table TreinoExercicio(
+    idTreino int not null,
+    idAluno int not null,
+    idExercicio int not null,
+    nSeries int,
+    minRep int,
+    maxRep int,
+    carga int,
+    descanso int,
+    primary key (idTreino, idAluno, idExercicio),
+    foreign key (idTreino) references Treino(idTreino),
+    foreign key (idAluno) references Aluno(idAluno),
+    foreign key (idExercicio) references Exercicio(idExercicio)
+);
+
