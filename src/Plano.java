@@ -2,23 +2,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Planos {
-    private int id;
+public class Plano {
+    private int idPlano;
     private String nome;
     private float preco;
 
-
-
-
-    public Planos(String nome, int id, float preco){
+    public Plano(String nome, int idPlano, float preco){
         this.nome = nome;
-        this.id = id;
+        this.idPlano = idPlano;
         this.preco = preco;
-
     }
 
     public int getId() {
-        return id;
+        return idPlano;
     }
 
     public String getNome() {

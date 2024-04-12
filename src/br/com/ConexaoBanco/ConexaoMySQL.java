@@ -15,7 +15,7 @@ public class ConexaoMySQL {
 
     private final static String serverName = "localhost";    //caminho do servidor do BD
 
-    private final static String mydatabase = "academia";        //nome do seu banco de dados
+    private final static String mydatabase = "Academia";        //nome do seu banco de dados
 
     private static final String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
 
