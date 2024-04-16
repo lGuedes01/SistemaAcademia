@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 
 public class Sistema {
+/*
     private String nomeAcademia;
 
     public Sistema(String nome){
@@ -79,4 +80,5 @@ public class Sistema {
         float preco = input.nextFloat();
         return new Planos(nome,codigo,preco);
     }
+    */
 }
