@@ -1,6 +1,7 @@
+import com.mysql.cj.exceptions.WrongArgumentException;
+
 import java.sql.*;
 import java.util.Scanner;
-import br.com.ConexaoBanco.ConexaoMySQL;
 
 public class Aluno {
     private int idAluno;
@@ -13,63 +14,86 @@ public class Aluno {
     private Date dataVenc;
     private int cvc;
 
-    public Aluno(String cpf, String nome, String sDataNasc){
+    public int getIdAluno() {
+        return idAluno;
+    }
+
+    public void setIdAluno(int idAluno) {
+        this.idAluno = idAluno;
+    }
+
+    public Aluno(String cpf, String nome, String sDataNasc, int idPl, String sDPlano, String nCart, String sDVenc, int cvcNovo){
         this.cpf = cpf;
         this.nome = nome;
         this.dataNasc = Date.valueOf(sDataNasc);
+        setPlanoAluno(idPl,sDPlano,nCart,sDVenc,cvcNovo);
     }
 
-    public String getCPF(){
-        return cpf;
+    private void setPlanoAluno(int idPl, String sDPlano, String nCart, String sDVenc, int cvcNovo){
+        this.idPlano = idPl;
+        this.dataPlano = Date.valueOf(sDPlano);
+        this.nCartao = nCart;
+        this.dataVenc = Date.valueOf(sDVenc);
+        this.cvc = cvcNovo;
     }
 
-    public Date getDataNasc(){
-        return dataNasc;
-    }
-
-    public String getNome(){
-        return nome;
-    }
-
-    public void setPlano(int idPl, String sDPlano, String nCart, String sDVenc, int cvcNovo){
-        idPlano = idPl;
-        dataPlano = Date.valueOf(sDPlano);
-        nCartao = nCart;
-        dataVenc = Date.valueOf(sDVenc);
-    }
-
-    public void buscarAlunoCPF(java.sql.Connection con){
+    //coloquei como estatico
+    public static Aluno buscarAlunoCPF(Connection con, String cpf){
         String sql = "SELECT * FROM Aluno where cpf = ?";
         try (PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setString(1, cpf);
             ResultSet rs = statement.executeQuery();
             if (rs.next()){
+                int idAluno = rs.getInt(1);
+                String cpfAluno = rs.getString(2);
+                String nome = rs.getString(3);
+                Date dataNasc = rs.getDate(4);
+                int idPlano = rs.getInt(5);
+                Date dataPlano = rs.getDate(6);
+                String nCartao = rs.getString(7);
+                Date dataVenc = rs.getDate(8);
+                int cvc = rs.getInt(9);
+                Aluno aluno = new Aluno(cpfAluno, nome, dataNasc.toString(), idPlano, dataPlano.toString(), nCartao, dataVenc.toString(), cvc);
+                aluno.setIdAluno(idAluno);
+                return aluno;
+            }
+            else{
+                throw new WrongArgumentException("Esse CPF não está cadastrado no sistema");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    //adicionei os dados do cartão no momento de cadastrar um aluno
+    public void inserirAluno(java.sql.Connection con) {
+        String sql = "INSERT INTO aluno (cpf, nome, dataNasc, idPlano, dataPlano, nCartao, dataVenc, cvc)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, cpf);
+            statement.setString(2, nome);
+            statement.setDate(3,  dataNasc);
+            statement.setInt(4,idPlano);
+            statement.setDate(5,dataPlano);
+            statement.setString(6,nCartao);
+            statement.setDate(7,dataVenc);
+            statement.setInt(8,cvc);
+            statement.executeUpdate();
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()){
                 idAluno = rs.getInt(1);
-                cpf = rs.getString(2);
-                nome = rs.getString(3);
-                dataNasc = rs.getDate(4);
-                idPlano = rs.getInt(5);
-                dataPlano = rs.getDate(6);
-                nCartao = rs.getString(7);
-                dataVenc = rs.getDate(8);
-                cvc = rs.getInt(9);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void inserirAluno(java.sql.Connection con) {
-        String sql = "INSERT INTO Aluno (cpf, nome, dataNasc) VALUES (?, ?, ?)";
-        try (PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    public void excluirDados(java.sql.Connection con) {
+        String sql = "DELETE FROM aluno WHERE cpf = ?";
+        try (PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setString(1, cpf);
-            statement.setString(2, nome);
-            statement.setDate(3,  dataNasc);
             statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
-            if (rs.next()){
-                idAluno = rs.getInt(1);
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -86,6 +110,70 @@ public class Aluno {
             statement.setInt(6, idAluno);
             statement.executeUpdate();
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public static void cadastrarAluno(){
+        Aluno aluno = criarInstanciaAluno();
+        aluno.inserirAluno(Main.con);
+    }
+    public static Aluno criarInstanciaAluno(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("===Cadastrando aluno===");
+        System.out.println("Informe o nome do aluno:");
+        String nome = input.nextLine();
+        System.out.println("Informe o cpf do aluno:");
+        String cpf = input.nextLine();
+        System.out.println("Informe a data de nascimento do aluno (yyyy-mm-dd):");
+        String dataNasc = input.nextLine();
+        System.out.println("Informe o id do Plano que o aluno será cadastrado:");
+        int idPlano = input.nextInt(); input.nextLine();
+        Plano.buscarPlanoId(Main.con, idPlano);
+        System.out.println("Informe a data de ingresso no plano (yyyy-mm-dd):");
+        String dataPlano = input.nextLine();
+        System.out.println("Informe o numero do cartão:");
+        String nCartao = input.nextLine();
+        System.out.println("Informe o cvc do cartão:");
+        int cvc = input.nextInt(); input.nextLine();
+        System.out.println("Informe a data de vencimento do cartão (yyyy-mm-dd):");
+        String dataVenc = input.nextLine();
+
+        return new Aluno(cpf,nome,dataNasc,idPlano, dataPlano,nCartao,dataVenc,cvc);
+    }
+
+    public void alterarDados(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Informe o Id do novo plano para alterar: ");
+        int id = input.nextInt(); input.nextLine();
+        System.out.println("Informe a data de inicio (yyyy-mm-dd): ");
+        String dataIn = input.nextLine();
+        System.out.println("Informe o numero do novo cartão: ");
+        String nCart = input.nextLine();
+        System.out.println("Informe a data de vencimento do cartão (yyyy-mm-dd):");
+        String dataVenc = input.nextLine();
+        System.out.println("Informe o cvc do cartão: ");
+        int cvc = input.nextInt();
+        this.setPlanoAluno(id,dataIn,nCart,dataVenc,cvc);
+        this.updatePlanoAluno(Main.con);
+    }
+
+    public void mostrarDados() {
+        //depois implementar
+    }
+
+    public void mostrarTreinos(java.sql.Connection con) {
+        String sql = "SELECT * FROM treino WHERE idAluno = ?";
+        try(PreparedStatement statement = con.prepareStatement(sql)){
+            statement.setInt(1,idAluno);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                int idTreino = rs.getInt(1);
+                String nomeTreino = rs.getString(3);
+                System.out.println("ID: " + idTreino + ". Treino de " + nomeTreino + ".");
+            }
+        } catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

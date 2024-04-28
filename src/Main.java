@@ -2,25 +2,85 @@ import br.com.ConexaoBanco.ConexaoMySQL;
 
 import java.sql.Connection;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.sql.Date;
 import java.util.Scanner;
 
 public class Main {
-    static Connection con = ConexaoMySQL.getConexaoMySQL();
+    public static Connection con = ConexaoMySQL.getConexaoMySQL();
 
-    public static void main(String[] args) throws ParseException {
-        Aluno aluno1 = new Aluno("Lucas", "10101","1999-08-10");
-        Aluno aluno2 = new Aluno("Abner", "01010","1999-09-10");
-        Plano plano1 = new Plano("Normal", 1, 64.99f);
-        // Só pra testar se tá funcionando mesmo, depois ajeita legal na hr de cadastrar alguem no banco
-        String data = "2025-10-10";
-        Date datateste = Date.valueOf(data);
-
-        System.out.println(con);
-
-        //aluno1.inserirAluno(con);
-        //aluno2.inserirAluno(con);
-        //plano1.inserirPlano(con);
+    public static String pedirCPF(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Insira um CPF: ");
+        return input.nextLine();
     }
+    public static void main(String[] args) throws ParseException {
+            int op = -1;
+        while (op != 0){
+            op = Menu.menu_principal();
+            int op2;
+            switch (op){
+                case 1:
+                    op2 = Menu.menu_alunos();
+                    Aluno aluno;
+                    String cpf;
+                    switch (op2){
+                        case 1:
+                            //Cadastrar aluno
+                            Aluno.cadastrarAluno();
+                            break;
+                        case 2:
+                            //Buscar aluno
+                            cpf = pedirCPF();
+                            aluno = Aluno.buscarAlunoCPF(con,cpf);
+                            int op3 = Menu.menu_aluno();
+                            switch (op3){
+                                case 1:
+                                    aluno.mostrarDados();
+                                    break;
+                                case 2:
+                                    aluno.alterarDados();
+                                    break;
+                                case 3:
+                                    aluno.excluirDados(con);
+                                    break;
+                                case 4:
+                                    Treino treino = Treino.cadastrarTreino(aluno.getIdAluno());
+                                    treino.acrescentarTreino();
+                                    break;
+                                case 5:
+                                    aluno.mostrarTreinos(con);
+                                    break;
+                            }
+
+                            break;
+                    }
+                    break;
+                case 2:
+                    op2 = Menu.menu_treinos();
+                    switch (op2){
+                        case 1:
+                            Exercicio.cadastrarExercicio();
+                            break;
+                        case 2:
+                            Exercicio.listarExercicios(Main.con);
+                            Exercicio exercicio = Exercicio.escolherExercicio();
+                            exercicio.alterarExercicio();
+                            break;
+                    }
+                    break;
+                case 3:
+                    op2 = Menu.menu_planos();
+                    switch (op2){
+                        case 1:
+                            Plano.criarPlano();
+                            break;
+                        case 2:
+                            Plano.alterarPlano();
+                            break;
+                    }
+                    break;
+                case 4:
+                    break;
+            }
+        }
+        }
 }
