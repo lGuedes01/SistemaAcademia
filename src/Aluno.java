@@ -177,4 +177,21 @@ public class Aluno {
             throw new RuntimeException(e);
         }
     }
+
+    public void registrarExecucaoDoExercicio(){
+        Scanner input = new Scanner(System.in);
+        boolean alterar = false;
+        do {
+            System.out.println("Diga o id do exercicio realizado:");
+            int idEx = input.nextInt(); input.nextLine();
+            Exercicio ex = Exercicio.selectExercicio(Main.con, idEx);
+            System.out.println("Diga a data em que foi realizado o exercicio:");
+            String sDataEx = input.nextLine();
+            AlunoExercicio aluex = new AlunoExercicio(this.getIdAluno(), ex.getId(), sDataEx);
+            System.out.println("Diga a carga:");
+            aluex.setCarga(input.nextFloat());
+            aluex.inserirAlunoExercicio(Main.con);
+        }while (alterar);
+
+    }
 }

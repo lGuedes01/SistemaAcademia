@@ -12,6 +12,12 @@ public class Main {
         System.out.println("Insira um CPF: ");
         return input.nextLine();
     }
+    public static int pedirID(String nomeTabela){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Digite o id da tabela " + nomeTabela + ": ");
+        return input.nextInt();
+    }
+
     public static void main(String[] args) throws ParseException {
             int op = -1;
         while (op != 0){
@@ -48,6 +54,14 @@ public class Main {
                                     break;
                                 case 5:
                                     aluno.mostrarTreinos(con);
+                                    break;
+                                case 6:
+                                    int idt = pedirID("treino");
+                                    treino = Treino.selectTreino(con, aluno.getIdAluno(), idt);
+                                    treino.mostrarExercicios(con);
+                                    break;
+                                case 7:
+                                    aluno.registrarExecucaoDoExercicio();
                                     break;
                             }
 

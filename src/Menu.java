@@ -35,6 +35,8 @@ public class Menu {
         System.out.println("3- Excluir aluno");
         System.out.println("4- Criar treino");
         System.out.println("5- Mostrar treinos do aluno");
+        System.out.println("6- Listar exercicios do treino");
+        System.out.println("7- Anotar execucao de exercicio");
         System.out.println("0- Voltar");
         System.out.printf("->");
         return input.nextInt();

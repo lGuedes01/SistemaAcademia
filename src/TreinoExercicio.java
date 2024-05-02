@@ -1,6 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class TreinoExercicio{
     private int idTreino;
@@ -13,8 +14,8 @@ public class TreinoExercicio{
         this.idExercicio = idExercicio;
     }
 
-    public void inserirTreinoExercicio(java.sql.Connection con, int nSeries, int minRep, int maxRep, int carga, int descanso){
-        String sql = "INSERT INTO treinoexercicio (idTreino, idAluno, idExercicio, nSeries, minRep, maxRep, carga, descanso)" +
+    public void inserirTreinoExercicio(java.sql.Connection con, int nSeries, int minRep, int maxRep, float carga, float descanso){
+        String sql = "INSERT INTO TreinoExercicio (idTreino, idAluno, idExercicio, nSeries, minRep, maxRep, carga, descanso)" +
                 " VALUES(?,?,?,?,?,?,?,?)";
         try(PreparedStatement statement = con.prepareStatement(sql)){
             statement.setInt(1,idTreino);
@@ -23,8 +24,8 @@ public class TreinoExercicio{
             statement.setInt(4,nSeries);
             statement.setInt(5,minRep);
             statement.setInt(6,maxRep);
-            statement.setInt(7,carga);
-            statement.setInt(8,descanso);
+            statement.setFloat(7,carga);
+            statement.setFloat(8,descanso);
             statement.executeUpdate();
         } catch (SQLException e){
             throw new RuntimeException(e);
@@ -50,9 +51,11 @@ public class TreinoExercicio{
         System.out.println("Digite o numero maximo de repetições: ");
         int maxRep = input.nextInt();
         System.out.println("Digite a carga do exercício:");
-        int carga = input.nextInt(); input.nextLine();
+        float carga = input.nextFloat();
+        input.nextLine();
         System.out.println("Digite o tempo de descanso:");
-        int descanso = input.nextInt();
+        float descanso = input.nextFloat();
         this.inserirTreinoExercicio(Main.con,nSeries,minRep,maxRep,carga,descanso);
     }
+
 }

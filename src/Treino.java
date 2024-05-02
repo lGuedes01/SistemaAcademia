@@ -21,6 +21,10 @@ public class Treino{
         return idTreino;
     }
 
+    public void setIdTreino(int idTr){
+        this.idTreino = idTr;
+    }
+
     public int getIdAluno(){
         return idAluno;
     }
@@ -44,14 +48,16 @@ public class Treino{
         }
     }
 
-    public Treino selectTreino(java.sql.Connection con, int idAluno, int idTreino){
+    public static Treino selectTreino(java.sql.Connection con, int idAluno, int idTreino){
         String sql = "SELECT * from treino WHERE idAluno = ? AND idTreino = ?";
         try(PreparedStatement statement = con.prepareStatement(sql)){
             statement.setInt(1,idAluno);
             statement.setInt(2,idTreino);
             ResultSet rs = statement.executeQuery();
             if (rs.next()){
-                return new Treino(rs.getInt(2),rs.getString(3));
+                Treino t = new Treino(rs.getInt(2),rs.getString(3));
+                t.setIdTreino(idTreino);
+                return t;
             }
             else throw new WrongArgumentException("Esse treino não existe no sistema");
         } catch (SQLException e){
@@ -81,6 +87,21 @@ public class Treino{
             String  res = input.nextLine();
             alterar = res.equals("s");
         }while (alterar);
+    }
 
+    public void mostrarExercicios(java.sql.Connection con) {
+        String sql = "SELECT * FROM TreinoExercicio WHERE idAluno = ? AND idTreino = ?";
+        try(PreparedStatement statement = con.prepareStatement(sql)){
+            statement.setInt(1, idAluno);
+            statement.setInt(2, idTreino);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                int idEx = rs.getInt(2);
+                Exercicio ex = Exercicio.selectExercicio(con, idEx);
+                System.out.println("ID: " + ex.getId() + " Exercício: " + ex.getNome() + ".");
+            }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 }
