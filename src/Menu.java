@@ -8,8 +8,9 @@ public class Menu {
         System.out.println("1- Aluno");
         System.out.println("2- Treino");
         System.out.println("3- Planos");
+        System.out.println("4- Relatórios");
         System.out.println("0- Sair");
-        System.out.printf("->");
+        System.out.print("->");
         return input.nextInt();
     }
 
@@ -17,7 +18,7 @@ public class Menu {
         System.out.println("1- Criar Plano");
         System.out.println("2- Alterar Plano");
         System.out.println("0- Voltar");
-        System.out.printf("->");
+        System.out.print("->");
         return input.nextInt();
     }
 
@@ -25,7 +26,7 @@ public class Menu {
         System.out.println("1- Cadastrar aluno");
         System.out.println("2- Buscar aluno");
         System.out.println("0- Voltar");
-        System.out.printf("->");
+        System.out.print("->");
         return input.nextInt();
     }
 
@@ -38,7 +39,7 @@ public class Menu {
         System.out.println("6- Listar exercicios do treino");
         System.out.println("7- Anotar execucao de exercicio");
         System.out.println("0- Voltar");
-        System.out.printf("->");
+        System.out.print("->");
         return input.nextInt();
     }
 
@@ -46,7 +47,14 @@ public class Menu {
         System.out.println("1- Criar execício");
         System.out.println("2- Alterar exercício");
         System.out.println("0- Voltar");
-        System.out.printf("->");
+        System.out.print("->");
+        return input.nextInt();
+    }
+
+    public static int menu_relatorios(){
+        System.out.println("1- Mostrar os dias que o aluno veio na academia");
+        System.out.println("2- Mostrar a evolução do aluno no exercício");
+        System.out.print("->");
         return input.nextInt();
     }
 }

@@ -192,6 +192,36 @@ public class Aluno {
             aluex.setCarga(input.nextFloat());
             aluex.inserirAlunoExercicio(Main.con);
         }while (alterar);
+    }
 
+    public void relDatas(java.sql.Connection con){
+        String sql = "SELECT DISTINCT dataExec FROM AlunoExercicio WHERE idAluno = ?";
+        try(PreparedStatement statement = con.prepareStatement(sql)){
+            statement.setInt(1,idAluno);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                Date dataEx = rs.getDate(1);
+                System.out.println(dataEx.toString());
+            }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+    public void relEvolucao(java.sql.Connection con, int idEx, Date dataIni, Date dataFim){
+        String sql = "SELECT dataExec, carga FROM AlunoExercicio WHERE idAluno = ? and idExercicio = ? and dataExec BETWEEN ? and ?";
+        try(PreparedStatement statement = con.prepareStatement(sql)){
+            statement.setInt(1,idAluno);
+            statement.setInt(2, idEx);
+            statement.setDate(3, dataIni);
+            statement.setDate(4, dataFim);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                Date dataEx = rs.getDate(1);
+                float carga = rs.getFloat(2);
+                System.out.println(dataEx.toString() + ": " + carga);
+            }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 }

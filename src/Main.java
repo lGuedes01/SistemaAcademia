@@ -1,6 +1,7 @@
 import br.com.ConexaoBanco.ConexaoMySQL;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.text.ParseException;
 import java.util.Scanner;
 
@@ -16,6 +17,12 @@ public class Main {
         Scanner input = new Scanner(System.in);
         System.out.println("Digite o id da tabela " + nomeTabela + ": ");
         return input.nextInt();
+    }
+
+    public static Date pedirData(boolean ini){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Digite a data " + ((ini) ? "de início" : "final") + ":");
+        return Date.valueOf(input.nextLine());
     }
 
     public static void main(String[] args) throws ParseException {
@@ -93,6 +100,19 @@ public class Main {
                     }
                     break;
                 case 4:
+                    op2 = Menu.menu_relatorios();
+                    String ncpf = pedirCPF();
+                    Aluno al = Aluno.buscarAlunoCPF(con, ncpf);
+                    switch (op2){
+                        case 1:
+                            al.relDatas(con);
+                            break;
+                        case 2:
+                            int idEx = pedirID("exercício");
+                            Date dataIni = pedirData(true);
+                            Date dataFim = pedirData(false);
+                            al.relEvolucao(con, idEx, dataIni, dataFim);
+                    }
                     break;
             }
         }
