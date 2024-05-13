@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.util.Scanner;
 
 public class Main {
-    public static Connection con = ConexaoMySQL.getConexaoMySQL();
 
     public static String pedirCPF(){
         Scanner input = new Scanner(System.in);

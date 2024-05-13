@@ -1,0 +1,28 @@
+principal
+|-- instrutor
+|   |-- alunos
+|   |   |-- cadastrar
+|   |   |-- buscar
+|   |   |-- alterar
+|   |   |   |-- plano
+|   |   |   '-- treinos
+|   |   |       |-- criar_treino
+|   |   |       |-- listar_treinos
+|   |   |       |-- listar_exercicios
+|   |   |       '-- adicionar_exercicios
+|   |   '-- excluir
+|   |-- planos
+|   |   |-- cadastrar
+|   |   |-- listar
+|   |   '-- alterar
+|   '-- exercicios
+|       |-- cadastrar
+|       '-- alterar
+|-- aluno
+|   |-- listar_treinos
+|   |-- listar_exercicios
+|   '-- anotar_execucao
+'-- relatorios
+    |-- relatorio1
+    '-- relatorio2
+
