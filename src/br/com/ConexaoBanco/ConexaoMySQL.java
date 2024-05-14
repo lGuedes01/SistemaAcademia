@@ -8,7 +8,7 @@ public class ConexaoMySQL {
     public static final String JDBC_DRIVER = "org.mysql.cj.jdbc.Driver";
     static final String SENHA = "root";
     static final String USUARIO = "root";
-    static final String URL_CONEXAO = "jdbc:mysql://localhost:5433/livraria";
+    static final String URL_CONEXAO = "jdbc:mysql://localhost/Academia";
 
     public static java.sql.Connection abrir(){
         Connection c = null;

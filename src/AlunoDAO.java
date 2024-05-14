@@ -45,6 +45,24 @@ public class AlunoDAO {
         }
     }
 
+    public Aluno buscarAlunoID(int id){
+        Connection con = ConexaoMySQL.abrir();
+        String sql = "SELECT * FROM Aluno where idAluno = ?";
+        try (PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()){
+                Aluno aluno = preencherAluno(rs);
+                return aluno;
+            }
+            else{
+                throw new WrongArgumentException("Esse ID não existe");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Aluno buscarAlunoCPF(String cpf){
         Connection con = ConexaoMySQL.abrir();
         String sql = "SELECT * FROM Aluno where cpf = ?";
@@ -58,6 +76,22 @@ public class AlunoDAO {
             else{
                 throw new WrongArgumentException("Esse CPF não está cadastrado no sistema");
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void alterarPlano(Aluno aluno){
+        Connection con = ConexaoMySQL.abrir();
+        String sql = "UPDATE Aluno SET idPlano = ?, dataPlano = ?, nCartao = ?, dataVenc = ?, cvc = ? WHERE idAluno = ?";
+        try (PreparedStatement statement = con.prepareStatement(sql)){
+            statement.setInt(1, aluno.getIdPlano());
+            statement.setDate(2, aluno.getDataPlano());
+            statement.setString(3, aluno.getnCartao());
+            statement.setDate(4, aluno.getDataVenc());
+            statement.setInt(5, aluno.getCVC());
+            statement.setInt(6, aluno.getIdAluno());
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

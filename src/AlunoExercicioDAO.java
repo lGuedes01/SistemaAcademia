@@ -29,13 +29,12 @@ public class AlunoExercicioDAO {
         }
     }
 
-    public ArrayList<Date> buscarDatas(int idAluno, int idExercicio){
+    public ArrayList<Date> buscarDatas(int idAluno){
         Connection con = ConexaoMySQL.abrir();
         ArrayList<Date> listDates = new ArrayList<Date>();
-        String sql = "SELECT dataExec from AlunoExercicio where IdAluno = ? and IdExercicio = ?";
+        String sql = "SELECT dataExec from AlunoExercicio where IdAluno = ?";
         try(PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, idAluno);
-            statement.setInt(2, idExercicio);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 listDates.add(rs.getDate(1));
@@ -49,7 +48,7 @@ public class AlunoExercicioDAO {
     public ArrayList<AlunoExercicio> buscarAluEx(int idAluno, int idExercicio, Date dataIni, Date dataFim){
         Connection con = ConexaoMySQL.abrir();
         ArrayList<AlunoExercicio> listAluEx = new ArrayList<AlunoExercicio>();
-        String sql = "SELECT dataExec, carga FROM AlunoExercicio WHERE idAluno = ? and idExercicio = ? and dataExec BETWEEN ? and ?";
+        String sql = "SELECT * FROM AlunoExercicio WHERE idAluno = ? and idExercicio = ? and dataExec BETWEEN ? and ?";
         try(PreparedStatement statement = con.prepareStatement(sql)){
             statement.setInt(1,idAluno);
             statement.setInt(2, idExercicio);

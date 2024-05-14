@@ -53,6 +53,7 @@ public class TreinoDAO {
             while (rs.next()){
                 listTr.add(preencherTreino(rs));
             }
+            return listTr;
         } catch (SQLException e){
             throw new RuntimeException(e);
         }

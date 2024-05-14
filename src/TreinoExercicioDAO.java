@@ -1,4 +1,5 @@
 import br.com.ConexaoBanco.ConexaoMySQL;
+import com.mysql.cj.exceptions.WrongArgumentException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -58,6 +59,8 @@ public class TreinoExercicioDAO {
             ResultSet rs = statement.executeQuery();
             if(rs.next()){
                 return preencherTreinoExercicio(rs);
+            } else {
+                throw new WrongArgumentException("Não existe esse registro");
             }
         } catch (SQLException e){
             throw new RuntimeException(e);
