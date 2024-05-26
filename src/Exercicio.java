@@ -1,13 +1,3 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import br.com.ConexaoBanco.ConexaoMySQL;
-import com.mysql.cj.exceptions.WrongArgumentException;
-
-import javax.sound.midi.Soundbank;
-import java.sql.*;
-import java.util.Scanner;
-
 public class Exercicio {
     private int idExercicio;
     private String nome;

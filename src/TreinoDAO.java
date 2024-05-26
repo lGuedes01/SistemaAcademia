@@ -1,4 +1,3 @@
-import br.com.ConexaoBanco.ConexaoMySQL;
 import com.mysql.cj.exceptions.WrongArgumentException;
 
 import java.sql.*;
@@ -11,9 +10,8 @@ public class TreinoDAO {
         return tr;
     }
     public Treino inserirTreino(Treino tr){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "INSERT INTO Treino (idAluno, nome) VALUES(?,?)";
-        try(PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, tr.getIdAluno());
             statement.setString(2, tr.getNome());
             statement.executeUpdate();
@@ -28,9 +26,8 @@ public class TreinoDAO {
     }
 
     public Treino buscarTreino(int idAluno, int idTreino){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "SELECT * from Treino WHERE idAluno = ? AND idTreino = ?";
-        try(PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1,idAluno);
             statement.setInt(2,idTreino);
             ResultSet rs = statement.executeQuery();
@@ -44,10 +41,9 @@ public class TreinoDAO {
     }
 
     public ArrayList<Treino> buscarTodos(int idAluno){
-        Connection con = ConexaoMySQL.abrir();
-        ArrayList<Treino> listTr = new ArrayList<Treino>();
+        ArrayList<Treino> listTr = new ArrayList<>();
         String sql = "SELECT * from Treino WHERE idAluno = ?";
-        try(PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1,idAluno);
             ResultSet rs = statement.executeQuery();
             while (rs.next()){
@@ -55,6 +51,29 @@ public class TreinoDAO {
             }
             return listTr;
         } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void alterarNome(Treino tr){
+        String sql = "UPDATE Treino SET nome = ? WHERE idTreino = ? and idAluno = ?";
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, tr.getNome());
+            statement.setInt(2, tr.getIdTreino());
+            statement.setInt(3, tr.getIdAluno());
+            statement.executeUpdate();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void excluirTreino(Treino tr){
+        String sql = "DELETE FROM Treino WHERE idTreino = ? AND idAluno = ?";
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setInt(1, tr.getIdTreino());
+            statement.setInt(2, tr.getIdAluno());
+            statement.executeUpdate();
+        }catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

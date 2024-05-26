@@ -1,4 +1,3 @@
-import br.com.ConexaoBanco.ConexaoMySQL;
 import com.mysql.cj.exceptions.WrongArgumentException;
 
 import java.sql.Connection;
@@ -18,10 +17,9 @@ public class TreinoExercicioDAO {
     }
 
     public void inserirTreinoExercicio(TreinoExercicio trex){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "INSERT INTO TreinoExercicio (idTreino, idAluno, idExercicio, nSeries, minRep, maxRep, carga, descanso)" +
                 " VALUES(?,?,?,?,?,?,?,?)";
-        try(PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, trex.getIdTreino());
             statement.setInt(2, trex.getIdAluno());
             statement.setInt(3, trex.getIdExercicio());
@@ -37,9 +35,8 @@ public class TreinoExercicioDAO {
     }
 
     public void alterarCarga(TreinoExercicio trex){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "UPDATE TreinoExercicio SET carga = ? WHERE idTreino = ? AND idAluno = ? AND idExercicio = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setFloat(1, trex.getCarga());
             statement.setInt(2, trex.getIdTreino());
             statement.setInt(3, trex.getIdAluno());
@@ -51,11 +48,11 @@ public class TreinoExercicioDAO {
     }
 
     public TreinoExercicio buscarTreinoExercicio(int idTreino, int idAluno, int idExercicio){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "SELECT * FROM TreinoExercicio WHERE idTreino = ? AND idAluno = ? AND idExercicio = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, idTreino);
             statement.setInt(2, idAluno);
+            statement.setInt(3, idExercicio);
             ResultSet rs = statement.executeQuery();
             if(rs.next()){
                 return preencherTreinoExercicio(rs);
@@ -68,10 +65,9 @@ public class TreinoExercicioDAO {
     }
 
     public ArrayList<TreinoExercicio> buscarTodos(int idTreino, int idAluno){
-        Connection con = ConexaoMySQL.abrir();
-        ArrayList<TreinoExercicio> listTrEx = new ArrayList<TreinoExercicio>();
+        ArrayList<TreinoExercicio> listTrEx = new ArrayList<>();
         String sql = "SELECT * FROM TreinoExercicio WHERE idTreino = ? AND idAluno = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, idTreino);
             statement.setInt(2, idAluno);
             ResultSet rs = statement.executeQuery();

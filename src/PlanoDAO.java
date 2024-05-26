@@ -1,4 +1,3 @@
-import br.com.ConexaoBanco.ConexaoMySQL;
 import com.mysql.cj.exceptions.WrongArgumentException;
 
 import java.sql.Connection;
@@ -12,9 +11,8 @@ public class PlanoDAO{
         return new Plano(rs.getInt(1), rs.getString(2), rs.getFloat(3));
     }
     public void inserirPlano(Plano pl){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "INSERT INTO Plano (idPlano, nome, preco) VALUES(?,?,?)";
-        try(PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, pl.getId());
             statement.setString(2, pl.getNome());
             statement.setFloat(3, pl.getPreco());
@@ -25,9 +23,8 @@ public class PlanoDAO{
     }
 
     public void alterarPrecoPlano(Plano pl) {
-        Connection con = ConexaoMySQL.abrir();
         String sql = "UPDATE Plano SET preco = ? where idPlano = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setFloat(1, pl.getPreco());
             statement.setInt(2, pl.getId());
             statement.executeUpdate();
@@ -37,9 +34,8 @@ public class PlanoDAO{
     }
 
     public Plano buscarPlanoId(int id){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "SELECT * FROM Plano WHERE idPlano = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             if (rs.next()){
@@ -54,10 +50,9 @@ public class PlanoDAO{
     }
 
     public ArrayList<Plano> buscarTodos(){
-        Connection con = ConexaoMySQL.abrir();
-        ArrayList<Plano> listPl = new ArrayList<Plano>();
+        ArrayList<Plano> listPl = new ArrayList<>();
         String sql = "SELECT * FROM Plano";
-        try (PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
             while (rs.next()){
                 listPl.add(preencherPlano(rs));

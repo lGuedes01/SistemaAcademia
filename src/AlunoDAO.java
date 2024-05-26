@@ -1,4 +1,3 @@
-import br.com.ConexaoBanco.ConexaoMySQL;
 import com.mysql.cj.exceptions.WrongArgumentException;
 
 import java.sql.*;
@@ -22,10 +21,9 @@ public class AlunoDAO {
         return aluno;
     }
     public Aluno inserirAluno(Aluno al) {
-        Connection con = ConexaoMySQL.abrir();
         String sql = "INSERT INTO Aluno (cpf, nome, dataNasc, idPlano, dataPlano, nCartao, dataVenc, cvc)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, al.getCPF());
             statement.setString(2, al.getNome());
             statement.setDate(3,  al.getDataNasc());
@@ -46,14 +44,12 @@ public class AlunoDAO {
     }
 
     public Aluno buscarAlunoID(int id){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "SELECT * FROM Aluno where idAluno = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             if (rs.next()){
-                Aluno aluno = preencherAluno(rs);
-                return aluno;
+                return preencherAluno(rs);
             }
             else{
                 throw new WrongArgumentException("Esse ID não existe");
@@ -64,14 +60,12 @@ public class AlunoDAO {
     }
 
     public Aluno buscarAlunoCPF(String cpf){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "SELECT * FROM Aluno where cpf = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setString(1, cpf);
             ResultSet rs = statement.executeQuery();
             if (rs.next()){
-                Aluno aluno = preencherAluno(rs);
-                return aluno;
+                return preencherAluno(rs);
             }
             else{
                 throw new WrongArgumentException("Esse CPF não está cadastrado no sistema");
@@ -82,9 +76,8 @@ public class AlunoDAO {
     }
 
     public void alterarPlano(Aluno aluno){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "UPDATE Aluno SET idPlano = ?, dataPlano = ?, nCartao = ?, dataVenc = ?, cvc = ? WHERE idAluno = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, aluno.getIdPlano());
             statement.setDate(2, aluno.getDataPlano());
             statement.setString(3, aluno.getnCartao());
@@ -98,9 +91,8 @@ public class AlunoDAO {
     }
 
     public void excluirAluno(Aluno aluno) {
-        Connection con = ConexaoMySQL.abrir();
         String sql = "DELETE FROM Aluno WHERE idAluno = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, aluno.getIdAluno());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -109,10 +101,9 @@ public class AlunoDAO {
     }
 
     public ArrayList<Aluno> buscarTodos(){
-        ArrayList<Aluno> listAl = new ArrayList<Aluno>();
-        Connection con = ConexaoMySQL.abrir();
+        ArrayList<Aluno> listAl = new ArrayList<>();
         String sql = "SELECT * FROM Aluno";
-        try (PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
             while(rs.next()){
                 listAl.add(preencherAluno(rs));
@@ -122,5 +113,4 @@ public class AlunoDAO {
         throw new RuntimeException(e);
         }
     }
-
 }

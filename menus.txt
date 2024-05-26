@@ -9,15 +9,19 @@ principal
 |   |       |   |-- criar_treino
 |   |       |   |-- listar_treinos
 |   |       |   |-- listar_exercicios
-|   |       |   '-- adicionar_exercicios
+|   |       |   |-- adicionar_exercicios
+|   |       |   |-- renomear_treino
+|   |       |   '-- excluir_treino
 |   |       '-- excluir
 |   |-- planos
 |   |   |-- cadastrar
 |   |   |-- listar
-|   |   '-- alterar
+|   |   |-- alterar
+|   |   '-- excluir
 |   '-- exercicios
 |       |-- cadastrar
-|       '-- alterar
+|       |-- listar
+|       '-- excluir
 |-- aluno
 |   |-- listar_treinos
 |   |-- listar_exercicios

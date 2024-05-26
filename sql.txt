@@ -22,6 +22,7 @@ create table Aluno(
     foreign key (idPlano)
     references Plano(idPlano)
     on update cascade
+    on delete restrict
 );
 
 create table Exercicio(
@@ -37,6 +38,8 @@ create table Treino(
     nome varchar(255) not null,
     primary key (idTreino, idAluno),
     foreign key (idAluno) references Aluno(idAluno)
+    on update cascade
+    on delete cascade
 );
 
 create table AlunoExercicio(
@@ -45,8 +48,12 @@ create table AlunoExercicio(
     dataExec date not null,
     carga float,
     primary key (idAluno, idExercicio, dataExec),
-    foreign key (idAluno) references Aluno(idAluno),
+    foreign key (idAluno) references Aluno(idAluno)
+    on update cascade
+    on delete cascade,
     foreign key (idExercicio) references Exercicio(idExercicio)
+    on update cascade
+    on delete cascade
 );
 
 create table TreinoExercicio(
@@ -59,8 +66,14 @@ create table TreinoExercicio(
     carga float,
     descanso float,
     primary key (idTreino, idAluno, idExercicio),
-    foreign key (idTreino) references Treino(idTreino),
-    foreign key (idAluno) references Aluno(idAluno),
+    foreign key (idTreino) references Treino(idTreino)
+    on update cascade
+    on delete cascade,
+    foreign key (idAluno) references Aluno(idAluno)
+    on update cascade
+    on delete cascade,
     foreign key (idExercicio) references Exercicio(idExercicio)
+    on update cascade
+    on delete cascade
 );
 

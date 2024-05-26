@@ -1,5 +1,3 @@
-import br.com.ConexaoBanco.ConexaoMySQL;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,10 +13,9 @@ public class AlunoExercicioDAO {
     }
 
     public void inserirAlunoExercicio(AlunoExercicio aluex){
-        Connection con = ConexaoMySQL.abrir();
         String sql = "INSERT INTO AlunoExercicio(idAluno, idExercicio, dataExec, carga)" +
                 " VALUES(?,?,?,?)";
-        try(PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, aluex.getIdAluno());
             statement.setInt(2, aluex.getIdExercicio());
             statement.setDate(3, aluex.getDataExercicio());
@@ -30,10 +27,9 @@ public class AlunoExercicioDAO {
     }
 
     public ArrayList<Date> buscarDatas(int idAluno){
-        Connection con = ConexaoMySQL.abrir();
-        ArrayList<Date> listDates = new ArrayList<Date>();
+        ArrayList<Date> listDates = new ArrayList<>();
         String sql = "SELECT dataExec from AlunoExercicio where IdAluno = ?";
-        try(PreparedStatement statement = con.prepareStatement(sql)) {
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1, idAluno);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -46,10 +42,9 @@ public class AlunoExercicioDAO {
     }
 
     public ArrayList<AlunoExercicio> buscarAluEx(int idAluno, int idExercicio, Date dataIni, Date dataFim){
-        Connection con = ConexaoMySQL.abrir();
-        ArrayList<AlunoExercicio> listAluEx = new ArrayList<AlunoExercicio>();
+        ArrayList<AlunoExercicio> listAluEx = new ArrayList<>();
         String sql = "SELECT * FROM AlunoExercicio WHERE idAluno = ? and idExercicio = ? and dataExec BETWEEN ? and ?";
-        try(PreparedStatement statement = con.prepareStatement(sql)){
+        try(Connection con = ConexaoMySQL.abrir(); PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setInt(1,idAluno);
             statement.setInt(2, idExercicio);
             statement.setDate(3, dataIni);
