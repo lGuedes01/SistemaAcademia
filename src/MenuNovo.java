@@ -433,7 +433,11 @@ public class MenuNovo {
         float carga = float_input("Digite a carga: ");
         aluex.setCarga(carga);
         AlunoExercicioDAO aluexDAO = new AlunoExercicioDAO();
-        aluexDAO.inserirAlunoExercicio(aluex);
+        try {
+            aluexDAO.inserirAlunoExercicio(aluex);
+        } catch (RuntimeException e){
+            System.out.println("Não foi possível inserir a execução.");
+        }
     }
 
     public static void menuRelatorios(){
